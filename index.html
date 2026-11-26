@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rekap Penjualan Online</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#4f46e5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Rekap Jualan">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>
 :root{--bg:#eef1fb;--bgi:linear-gradient(180deg,#dfe6ff 0%,#f1f4fd 36%,#f6f7fc 100%);--card:#fff;--in:#f5f6fc;--tx:#1b2140;--mu:#6a7090;--bd:#e2e5f2;--pr:#3b5bdb;--ok:#14883f;--no:#d93b30;--wa:#b86a00;--sh:0 4px 16px rgba(40,50,120,.08);--hd:linear-gradient(135deg,#2b3a8f 0%,#4f46e5 55%,#8b5cf6 100%);--bt:linear-gradient(135deg,#3b5bdb,#6d5ef0);
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -114,7 +122,8 @@ nav button .ti{font-size:22px;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,
 </head>
 <body>
 <main>
-<header class="hero"><div class="hi">📒</div><div><h1>Rekap Penjualan Online</h1><p>Catat pesanan, stok, dan laba jualanmu</p></div></header>
+<header class="hero"><div class="hi">📒</div><div><h1>Rekap Penjualan Online</h1><p>Catat pesanan, stok, dan laba jualanmu</p></div><button class="s" id="inst" style="display:none;margin-left:auto">📲 Pasang</button></header>
+<div class="card" id="iosh" style="display:none"><b>Pasang di iPhone</b><p class="mu" style="margin:6px 0 10px">Ketuk ikon Bagikan di Safari, lalu pilih Tambah ke Layar Utama.</p><button class="s" id="iosx">Tutup</button></div>
 <nav id="tb"><button data-t="pes" class="on"><span class="ti">📝</span><span>Pesanan</span></button><button data-t="po"><span class="ti">📋</span><span>Pre-Order</span></button><button data-t="stk"><span class="ti">📦</span><span>Stok</span></button><button data-t="plg"><span class="ti">👥</span><span>Pelanggan</span></button><button data-t="bya"><span class="ti">💸</span><span>Biaya</span></button><button data-t="rkp"><span class="ti">📊</span><span>Rekap</span></button></nav>
 <div class="bar"><div><label for="bln">Bulan</label><input type="month" id="bln"></div>
 <div><label for="all">Periode</label><select id="all"><option value="0">Bulan ini saja</option><option value="1">Semua waktu</option></select></div></div>
@@ -422,6 +431,13 @@ $("rs").onclick=function(){
   catch(x){alert("Teks cadangan tidak valid.")}
 };
 render();
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){navigator.serviceWorker.register("sw.js").catch(function(){})}
+var dpr=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();dpr=e;$("inst").style.display=""});
+$("inst").onclick=function(){if(dpr){dpr.prompt();dpr=null;$("inst").style.display="none"}};
+window.addEventListener("appinstalled",function(){$("inst").style.display="none"});
+try{if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!navigator.standalone&&!localStorage.getItem(K+"-ios"))$("iosh").style.display=""}catch(e){}
+$("iosx").onclick=function(){$("iosh").style.display="none";try{localStorage.setItem(K+"-ios","1")}catch(e){}};
 </script>
 </body>
 </html>
